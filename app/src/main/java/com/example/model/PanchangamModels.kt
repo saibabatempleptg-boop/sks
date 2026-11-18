@@ -1,0 +1,31 @@
+package com.example.model
+
+data class PanchangamInfo(
+    val dateDisplay: String,
+    val dayOfWeekEn: String,
+    val dayOfWeekTe: String,
+    val samvatsara: String,
+    val ayana: String,
+    val ruthu: String,
+    val masa: String,
+    val paksha: String,
+    val tithi: String,
+    val tithiTe: String,
+    val nakshatra: String,
+    val nakshatraTe: String,
+    val yoga: String,
+    val yogaTe: String,
+    val karana: String,
+    val karanaTe: String,
+    val sunrise: String,
+    val sunset: String,
+    val abhijitMuhurtham: String,
+    val brahmaMuhurtham: String,
+    val amritaKalam: String,
+    val rahuKalam: String,
+    val yamaGandam: String,
+    val gulikaKalam: String,
+    val durmuhurtham: String,
+    val specialDayNote: String?,
+    val recommendedSeva: String
+)

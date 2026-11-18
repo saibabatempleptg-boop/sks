@@ -1,0 +1,122 @@
+{
+  "entities": {
+    "SevaReservation": {
+      "title": "SevaReservation",
+      "description": "Devotee puja and prasadam reservation at Sri Krishna Sai Seva Kendram",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Devotee's authenticated Google user UID"
+        },
+        "sevaId": {
+          "type": "string",
+          "description": "Identifier of the reserved seva"
+        },
+        "sevaTitle": {
+          "type": "string",
+          "description": "Title of the seva or puja"
+        },
+        "devoteeName": {
+          "type": "string",
+          "description": "Name of the devotee"
+        },
+        "devoteePhone": {
+          "type": "string",
+          "description": "Devotee contact phone number"
+        },
+        "gotram": {
+          "type": "string",
+          "description": "Devotee gotram for puja sankalpam"
+        },
+        "nakshatram": {
+          "type": "string",
+          "description": "Devotee birth star"
+        },
+        "preferredDate": {
+          "type": "string",
+          "description": "Selected date for performing the seva (YYYY-MM-DD)"
+        },
+        "specialPrayer": {
+          "type": "string",
+          "description": "Special prayer or sankalpam intention"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the reservation (e.g. Confirmed, Completed)"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the reservation was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the reservation was last updated"
+        }
+      },
+      "required": [
+        "userId",
+        "sevaId",
+        "sevaTitle",
+        "devoteeName",
+        "devoteePhone",
+        "gotram",
+        "preferredDate",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DevoteePrayer": {
+      "title": "DevoteePrayer",
+      "description": "Devotee prayer or sankalpam offered to Sri Sai Baba",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Devotee's authenticated Google user UID"
+        },
+        "devoteeName": {
+          "type": "string",
+          "description": "Devotee's name"
+        },
+        "prayerText": {
+          "type": "string",
+          "description": "Devotee's prayer message"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the prayer was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the prayer was last updated"
+        }
+      },
+      "required": [
+        "userId",
+        "devoteeName",
+        "prayerText",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/reservations/{reservationId}": {
+      "schema": {
+        "$ref": "#/entities/SevaReservation"
+      },
+      "description": "Devotee's seva and puja reservations subcollection"
+    },
+    "/users/{userId}/prayers/{prayerId}": {
+      "schema": {
+        "$ref": "#/entities/DevoteePrayer"
+      },
+      "description": "Devotee's personal prayers and sankalpams"
+    }
+  }
+}

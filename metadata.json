@@ -1,0 +1,6 @@
+{
+  "name": "Sri Krishna Sai Mandhiram",
+  "description": "Official app for Sri Krishna Sai Dhyana Mandhiram, Puritigadda. Darshan timings, abhishek schedules, homams, sacred gallery, directions, and devotee seva.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

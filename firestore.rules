@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidReservation(data) {
+      return data.keys().hasAll([
+        'userId', 'sevaId', 'sevaTitle', 'devoteeName',
+        'devoteePhone', 'gotram', 'preferredDate', 'createdAt', 'updatedAt'
+      ]) &&
+      data.userId is string && data.userId == request.auth.uid &&
+      data.sevaId is string && data.sevaId.size() > 0 && data.sevaId.size() <= 100 &&
+      data.sevaTitle is string && data.sevaTitle.size() > 0 && data.sevaTitle.size() <= 200 &&
+      data.devoteeName is string && data.devoteeName.size() > 0 && data.devoteeName.size() <= 150 &&
+      data.devoteePhone is string && data.devoteePhone.size() > 0 && data.devoteePhone.size() <= 30 &&
+      data.gotram is string && data.gotram.size() > 0 && data.gotram.size() <= 100 &&
+      (!('nakshatram' in data) || (data.nakshatram is string && data.nakshatram.size() <= 100)) &&
+      data.preferredDate is string && data.preferredDate.size() >= 8 && data.preferredDate.size() <= 20 &&
+      (!('specialPrayer' in data) || (data.specialPrayer is string && data.specialPrayer.size() <= 1000)) &&
+      (!('status' in data) || (data.status is string && data.status.size() <= 50)) &&
+      data.createdAt is timestamp && data.createdAt <= request.time &&
+      data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidPrayer(data) {
+      return data.keys().hasAll(['userId', 'devoteeName', 'prayerText', 'createdAt', 'updatedAt']) &&
+      data.userId is string && data.userId == request.auth.uid &&
+      data.devoteeName is string && data.devoteeName.size() > 0 && data.devoteeName.size() <= 150 &&
+      data.prayerText is string && data.prayerText.size() > 0 && data.prayerText.size() <= 2000 &&
+      data.createdAt is timestamp && data.createdAt <= request.time &&
+      data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /reservations/{reservationId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidReservation(request.resource.data);
+        allow update: if isOwner(userId) && isValidReservation(request.resource.data) &&
+                         request.resource.data.createdAt == resource.data.createdAt &&
+                         request.resource.data.userId == resource.data.userId;
+        allow delete: if isOwner(userId);
+      }
+
+      match /prayers/{prayerId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidPrayer(request.resource.data);
+        allow update: if isOwner(userId) && isValidPrayer(request.resource.data) &&
+                         request.resource.data.createdAt == resource.data.createdAt &&
+                         request.resource.data.userId == resource.data.userId;
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
